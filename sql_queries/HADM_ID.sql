@@ -45,7 +45,7 @@ UNION ALL
 SELECT DISTINCT
   admissions.HADM_ID AS patient,
   "Alive" AS activity,
-  "3000-01-01 00:00:00" AS timestamp
+  "2262-01-01 00:00:00" AS timestamp
   FROM
     physionet-data.mimiciii_clinical.admissions,
     physionet-data.mimiciii_clinical.diagnoses_icd
