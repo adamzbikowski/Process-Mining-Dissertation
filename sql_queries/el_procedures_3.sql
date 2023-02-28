@@ -87,8 +87,7 @@ UNION ALL
 SELECT DISTINCT
   prescriptions.HADM_ID AS patient,
   "Drug prescribed" AS activity,
-  string(prescriptions.STARTDATE) AS timestamp,
-  diagnoses_icd.icd9_code as ICD
+  string(prescriptions.STARTDATE) AS timestamp
   FROM 
     physionet-data.mimiciii_clinical.prescriptions,
     physionet-data.mimiciii_clinical.diagnoses_icd
