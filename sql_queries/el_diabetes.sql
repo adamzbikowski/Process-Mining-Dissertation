@@ -1,6 +1,7 @@
+
 SELECT DISTINCT
   procedureevents_mv.HADM_ID AS patient,
-  procedureevents_mv.ORDERCATEGORYNAME AS activity,
+  'Dialysis' AS activity,
   string(procedureevents_mv.STARTTIME) AS timestamp
   FROM 
     physionet-data.mimiciii_clinical.procedureevents_mv,
@@ -8,8 +9,46 @@ SELECT DISTINCT
   WHERE
     procedureevents_mv.STARTTIME IS NOT NULL AND
     diagnoses_icd.HADM_ID = procedureevents_mv.HADM_ID
+    AND (procedureevents_mv.ORDERCATEGORYNAME = 'Dialysis'
+    OR procedureevents_mv.ORDERCATEGORYNAME = 'Peritoneal Dialysis')
     -- diagnoses_icd.SUBJECT_ID = datetimeevents.SUBJECT_ID 
-    AND diagnoses_icd.icd9_code BETWEEN '390%' AND '460%'
+    AND diagnoses_icd.icd9_code = '25000'
+    -- Change the values for different diseases
+
+UNION ALL
+
+SELECT DISTINCT
+  procedureevents_mv.HADM_ID AS patient,
+  'IV' AS activity,
+  string(procedureevents_mv.STARTTIME) AS timestamp
+  FROM 
+    physionet-data.mimiciii_clinical.procedureevents_mv,
+    physionet-data.mimiciii_clinical.diagnoses_icd
+  WHERE
+    procedureevents_mv.STARTTIME IS NOT NULL AND
+    diagnoses_icd.HADM_ID = procedureevents_mv.HADM_ID
+    AND (procedureevents_mv.ORDERCATEGORYNAME = 'Invasive Lines'
+    OR procedureevents_mv.ORDERCATEGORYNAME = 'Peripheral Lines')
+   
+    AND diagnoses_icd.icd9_code = '25000'
+    -- Change the values for different diseases
+
+UNION ALL
+
+SELECT DISTINCT
+  procedureevents_mv.HADM_ID AS patient,
+  'Ventilation' AS activity,
+  string(procedureevents_mv.STARTTIME) AS timestamp
+  FROM 
+    physionet-data.mimiciii_clinical.procedureevents_mv,
+    physionet-data.mimiciii_clinical.diagnoses_icd
+  WHERE
+    procedureevents_mv.STARTTIME IS NOT NULL AND
+    diagnoses_icd.HADM_ID = procedureevents_mv.HADM_ID
+    AND (procedureevents_mv.ORDERCATEGORYNAME = 'Ventilation'
+    OR procedureevents_mv.ORDERCATEGORYNAME = 'Intubation/Extubation')
+   
+    AND diagnoses_icd.icd9_code = '25000'
     -- Change the values for different diseases
 
 UNION ALL
@@ -24,7 +63,7 @@ SELECT DISTINCT
   WHERE 
     -- admissions.admittime IS NOT NULL AND
     diagnoses_icd.HADM_ID = admissions.HADM_ID
-    AND diagnoses_icd.icd9_code BETWEEN '390%' AND '460%'
+    AND diagnoses_icd.icd9_code = '25000'
   
 UNION ALL
 
@@ -38,7 +77,7 @@ SELECT DISTINCT
   WHERE 
     -- admissions.DISCHTIME IS NOT NULL AND
     diagnoses_icd.HADM_ID = admissions.HADM_ID
-    AND diagnoses_icd.icd9_code BETWEEN '390%' AND '460%'
+    AND diagnoses_icd.icd9_code = '25000'
 
 UNION ALL 
 
@@ -52,7 +91,7 @@ SELECT DISTINCT
   WHERE 
     -- icustays.INTIME IS NOT NULL AND
     diagnoses_icd.HADM_ID = icustays.HADM_ID
-    AND diagnoses_icd.icd9_code BETWEEN '390%' AND '460%'
+    AND diagnoses_icd.icd9_code  = '25000'
 
 UNION ALL
 
@@ -66,18 +105,4 @@ SELECT DISTINCT
   WHERE 
     -- icustays.INTIME IS NOT NULL AND
     diagnoses_icd.HADM_ID = icustays.HADM_ID
-    AND diagnoses_icd.icd9_code BETWEEN '390%' AND '460%'
-
-UNION ALL
-
-SELECT DISTINCT
-  services.HADM_ID AS patient,
-  "Transfer" AS activity,
-  string(services.TRANSFERTIME) AS timestamp
-  FROM 
-    physionet-data.mimiciii_clinical.services,
-    physionet-data.mimiciii_clinical.diagnoses_icd
-  WHERE
-    services.TRANSFERTIME IS NOT NULL AND
-    diagnoses_icd.HADM_ID = services.HADM_ID
-    AND diagnoses_icd.icd9_code BETWEEN '390%' AND '460%'
+    AND diagnoses_icd.icd9_code = '25000'
