@@ -1,4 +1,4 @@
--- Events: Admitted, Discharged, Entered ICU, Left ICU,
+-- Events: Admitted, Discharged, Entered ICU, Left ICU,= '4019'
 
 SELECT DISTINCT
   admissions.HADM_ID AS patient,
@@ -10,7 +10,7 @@ SELECT DISTINCT
   WHERE 
     -- admissions.admittime IS NOT NULL AND
     diagnoses_icd.HADM_ID = admissions.HADM_ID
-    AND diagnoses_icd.icd9_code BETWEEN '390%' AND '460%'
+    AND diagnoses_icd.icd9_code = '4019'
   
 UNION ALL
 
@@ -24,7 +24,7 @@ SELECT DISTINCT
   WHERE 
     -- admissions.DISCHTIME IS NOT NULL AND
     diagnoses_icd.HADM_ID = admissions.HADM_ID
-    AND diagnoses_icd.icd9_code BETWEEN '390%' AND '460%'
+    AND diagnoses_icd.icd9_code = '4019'
 
 UNION ALL 
 
@@ -38,7 +38,7 @@ SELECT DISTINCT
   WHERE 
     -- icustays.INTIME IS NOT NULL AND
     diagnoses_icd.HADM_ID = icustays.HADM_ID
-    AND diagnoses_icd.icd9_code BETWEEN '390%' AND '460%'
+    AND diagnoses_icd.icd9_code = '4019'
 
 UNION ALL
 
@@ -52,4 +52,4 @@ SELECT DISTINCT
   WHERE 
     -- icustays.INTIME IS NOT NULL AND
     diagnoses_icd.HADM_ID = icustays.HADM_ID
-    AND diagnoses_icd.icd9_code BETWEEN '390%' AND '460%'
+    AND diagnoses_icd.icd9_code = '4019'
