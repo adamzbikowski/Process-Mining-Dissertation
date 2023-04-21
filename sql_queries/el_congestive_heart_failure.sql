@@ -53,6 +53,23 @@ SELECT DISTINCT
 UNION ALL
 
 SELECT DISTINCT
+  procedureevents_mv.HADM_ID AS patient,
+  'Imaging' AS activity,
+  string(procedureevents_mv.STARTTIME) AS timestamp
+  FROM 
+    physionet-data.mimiciii_clinical.procedureevents_mv,
+    physionet-data.mimiciii_clinical.diagnoses_icd
+  WHERE
+    procedureevents_mv.STARTTIME IS NOT NULL AND
+    diagnoses_icd.HADM_ID = procedureevents_mv.HADM_ID
+    AND (procedureevents_mv.ORDERCATEGORYNAME = 'Imaging')
+    AND diagnoses_icd.icd9_code = '4280'
+    -- Change the values for different diseases
+
+
+UNION ALL
+
+SELECT DISTINCT
   admissions.HADM_ID AS patient,
   "Admitted" AS activity,
   string(admissions.ADMITTIME) AS timestamp
