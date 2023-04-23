@@ -53,8 +53,6 @@ SELECT DISTINCT
 
 UNION ALL
 
-UNION ALL
-
 SELECT DISTINCT
   procedureevents_mv.HADM_ID AS patient,
   'Imaging' AS activity,
@@ -69,6 +67,7 @@ SELECT DISTINCT
     AND diagnoses_icd.icd9_code = '25000'
     -- Change the values for different diseases
 
+UNION ALL
 
 SELECT DISTINCT
   admissions.HADM_ID AS patient,
