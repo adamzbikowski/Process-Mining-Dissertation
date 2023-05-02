@@ -1,4 +1,4 @@
--- Events: Admitted, Discharged, Dead, Alive, Entered ICU, Left ICU, Lab Test, Trasnsfer
+-- Events: Admitted, Discharged, Entered ICU, Left ICU, Transfer
 
 SELECT DISTINCT
   admissions.HADM_ID AS patient,
@@ -25,34 +25,6 @@ SELECT DISTINCT
     -- admissions.DISCHTIME IS NOT NULL AND
     diagnoses_icd.HADM_ID = admissions.HADM_ID
     AND diagnoses_icd.icd9_code BETWEEN '390%' AND '460%'
-
-UNION ALL
-
-SELECT DISTINCT
-  admissions.HADM_ID AS patient,
-  "Dead" AS activity,
-  string(admissions.DEATHTIME) AS timestamp
-  FROM
-    physionet-data.mimiciii_clinical.admissions,
-    physionet-data.mimiciii_clinical.diagnoses_icd
-  WHERE
-    diagnoses_icd.HADM_ID = admissions.HADM_ID
-    AND diagnoses_icd.icd9_code BETWEEN '390%' AND '460%'
-    AND admissions.DEATHTIME IS NOT NULL
-
-UNION ALL
-
-SELECT DISTINCT
-  admissions.HADM_ID AS patient,
-  "Alive" AS activity,
-  "2262-01-01 00:00:00" AS timestamp
-  FROM
-    physionet-data.mimiciii_clinical.admissions,
-    physionet-data.mimiciii_clinical.diagnoses_icd
-  WHERE
-    diagnoses_icd.HADM_ID = admissions.HADM_ID
-    AND diagnoses_icd.icd9_code BETWEEN '390%' AND '460%'
-    AND admissions.DEATHTIME IS NULL
 
 UNION ALL 
 
@@ -85,20 +57,6 @@ SELECT DISTINCT
 UNION ALL
 
 SELECT DISTINCT
-  microbiologyevents.HADM_ID AS patient,
-  "Lab test" AS activity,
-  string(microbiologyevents.CHARTTIME) AS timestamp
-  FROM 
-    physionet-data.mimiciii_clinical.microbiologyevents,
-    physionet-data.mimiciii_clinical.diagnoses_icd
-  WHERE
-    -- microbiologyevents.CHARTTIME IS NOT NULL AND
-    diagnoses_icd.HADM_ID = microbiologyevents.HADM_ID
-    AND diagnoses_icd.icd9_code BETWEEN '390%' AND '460%'
-
-UNION ALL
-
-SELECT DISTINCT
   services.HADM_ID AS patient,
   "Transfer" AS activity,
   string(services.TRANSFERTIME) AS timestamp
@@ -109,5 +67,3 @@ SELECT DISTINCT
     services.TRANSFERTIME IS NOT NULL AND
     diagnoses_icd.HADM_ID = services.HADM_ID
     AND diagnoses_icd.icd9_code BETWEEN '390%' AND '460%'
-  
-
